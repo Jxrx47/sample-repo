@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>ระบบแนะนำการวอร์มอัพก่อนว่ายน้ำ</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f6f8; padding:20px; }
+    .card { background:#fff; padding:20px; border-radius:12px; max-width:600px; margin:auto; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+    h1 { text-align:center; }
+    label { display:block; margin-top:10px; }
+    select, input { width:100%; padding:8px; margin-top:5px; }
+    button { margin-top:20px; width:100%; padding:10px; border:none; border-radius:8px; background:#0077ff; color:#fff; font-size:16px; cursor:pointer; }
+    .result { margin-top:20px; background:#eef5ff; padding:15px; border-radius:8px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🏊‍♂️ วอร์มอัพก่อนลงสระ</h1>
+
+    <label>ระดับการว่ายน้ำ</label>
+    <select id="level">
+      <option value="beginner">มือใหม่</option>
+      <option value="intermediate">ปานกลาง</option>
+      <option value="advanced">ขั้นสูง</option>
+    </select>
+
+    <label>ระยะเวลาที่จะว่าย (นาที)</label>
+    <input type="number" id="time" value="30" />
+
+    <label>อาการบาดเจ็บ</label>
+    <select id="injury">
+      <option value="none">ไม่มี</option>
+      <option value="shoulder">ไหล่</option>
+      <option value="knee">เข่า</option>
+      <option value="back">หลัง</option>
+    </select>
+
+    <button onclick="recommend()">แนะนำการวอร์มอัพ</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+<script>
+function recommend() {
+  const level = document.getElementById('level').value;
+  const time = document.getElementById('time').value;
+  const injury = document.getElementById('injury').value;
+
+  let warmups = [];
+
+  // พื้นฐาน
+  warmups.push('หมุนคอและหัวไหล่ 1 นาที');
+  warmups.push('ยืดแขนและหลัง 1 นาที');
+
+  if (level !== 'beginner') {
+    warmups.push('Squat เบา ๆ 15 ครั้ง');
+  }
+
+  if (level === 'advanced' && time > 45) {
+    warmups.push('Jumping Jack 30 วินาที');
+  }
+
+  if (injury === 'shoulder') {
+    warmups = warmups.filter(w => !w.includes('Jump'));
+    warmups.push('ยืดหัวไหล่เบา ๆ เพิ่ม 1 นาที (หลีกเลี่ยงแรง)');
+  }
+
+  if (injury === 'knee') {
+    warmups = warmups.filter(w => !w.includes('Squat'));
+    warmups.push('ยืดกล้ามเนื้อขาแบบไม่งอเข่า 1 นาที');
+  }
+
+  if (injury === 'back') {
+    warmups.push('ยืดหลังท่าแมว–วัว 1 นาที');
+  }
+
+  let output = '<h3>✅ แนะนำการวอร์มอัพ</h3><ol>';
+  warmups.forEach(w => output += `<li>${w}</li>`);
+  output += '</ol><small>* หากมีอาการเจ็บควรหยุดทันที</small>';
+
+  document.getElementById('result').innerHTML = output;
+}
+</script>
+</body>
+</html>
